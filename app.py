@@ -5,25 +5,33 @@ import json
 from aiohttp import web, ClientSession
 import websockets
 
+import re
+
 PORT = int(os.environ.get("PORT", os.environ.get("RAILWAY_PORT", 8080)))
 
-COOKIE_STR = (
+DEFAULT_COOKIE = (
     "pingless.sid=s:MPRJsWMXRaFVSffX6Il7zRPv7lNMqiK1.2SZCFbgjO4ZO0WPPCHFTZBSUAQTIdTxnNSLra7KE2Tw; "
     "userId=1448591330174570511; "
     "fp=7d597191f063c3e60f8934fec5a01042f6d31c706b41609255fba4de2c1d3bc6; "
     "cookie_consent=%7B%22necessary%22%3Atrue%2C%22preferences%22%3Afalse%2C%22analytics%22%3Afalse%2C%22ts%22%3A1794550754496%2C%22v%22%3A1%7D"
 )
 
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+COOKIE_STR = os.environ.get("PINGLESS_COOKIE", DEFAULT_COOKIE).strip()
 
-SERVER_ID = "1e2003cc"
-SERVER_NUMERIC = "10745"
-SERVER_MANAGE_URL = f"https://dash.pingless.org/server/manage?id={SERVER_ID}&numeric={SERVER_NUMERIC}&mode=server"
+match_uid = re.search(r"userId=([0-9]+)", COOKIE_STR)
+USER_ID = os.environ.get("PINGLESS_USER_ID", match_uid.group(1) if match_uid else "1448591330174570511")
+
+SERVER_ID = os.environ.get("SERVER_ID", "1e2003cc").strip()
+SERVER_NUMERIC = os.environ.get("SERVER_NUMERIC", "10745").strip()
+ENABLE_RENEWAL = bool(SERVER_ID and SERVER_ID.lower() not in ("none", "false", "0"))
+SERVER_MANAGE_URL = f"https://dash.pingless.org/server/manage?id={SERVER_ID}&numeric={SERVER_NUMERIC}&mode=server" if ENABLE_RENEWAL else ""
+
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 
 # State tracking
 state = {
     "status": "Initializing...",
-    "user_id": "1448591330174570511",
+    "user_id": USER_ID,
     "coins_per_minute": 0.0,
     "next_reward_in": 0,
     "total_earned": 0.0,
@@ -32,10 +40,10 @@ state = {
     "last_reward_at": 0,
     "party_multiplier": 1.0,
     "presence_count": 0,
-    "server_id": SERVER_ID,
-    "server_numeric": SERVER_NUMERIC,
-    "server_renewal_status": "Checking...",
-    "server_time_remaining": "Checking...",
+    "server_id": SERVER_ID if ENABLE_RENEWAL else "None",
+    "server_numeric": SERVER_NUMERIC if ENABLE_RENEWAL else "None",
+    "server_renewal_status": "Checking..." if ENABLE_RENEWAL else "Disabled",
+    "server_time_remaining": "Checking..." if ENABLE_RENEWAL else "N/A",
     "server_last_renewal": "N/A",
     "server_next_renewal": "N/A",
     "last_renewal_attempt": 0,
@@ -156,6 +164,9 @@ async def renew_and_verify_server():
             return True
 
 async def server_renewal_loop():
+    if not ENABLE_RENEWAL:
+        log("Server auto-renewal loop disabled (no SERVER_ID configured).")
+        return
     # Initial check on startup
     await asyncio.sleep(5)
     while True:
