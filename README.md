@@ -1,63 +1,58 @@
 <h1 align="center">⚡ Pingless Direct AFK Bot</h1>
 
 <p align="center">
-  <a href="https://github.com/itz-spidy">
-    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=28&pause=1000&color=FFB703&center=true&vCenter=true&width=900&lines=24%2F7+Direct+AFK+Rewards+Bot+for+dash.pingless.org;No+VNC+Needed+%7C+Low+Memory+%7C+Zero+Browser+Crash;Direct+WebSocket+Protocol+%7C+Auto+Keepalive;Deployable+to+Render%2C+Railway+%26+VPS" alt="Typing SVG" />
+  <a href="https://github.com/itzxsahil">
+    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=28&pause=1000&color=FFB703&center=true&vCenter=true&width=900&lines=24%2F7+Direct+AFK+Rewards+Bot+for+dash.pingless.org;No+VNC+Needed+%7C+Low+Memory+%7C+Zero+Browser+Crash;Direct+WebSocket+Protocol+%7C+Auto+Keepalive;Made+with+❤️+by+itzxsahil" alt="Typing SVG" />
   </a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Pingless-AFK%20Bot-FFB703?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Direct%20Protocol-WebSocket-023E8A?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Render%20%26%20Railway-Cloud%20Ready-46E3B7?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Python-AsyncIO-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Pingless-AFK%20Bot-FFB703?style=for-the-badge"> <img src="https://img.shields.io/badge/Direct%20Protocol-WebSocket-023E8A?style=for-the-badge"> <img src="https://img.shields.io/badge/Render%20%26%20Railway-Cloud%20Ready-46E3B7?style=for-the-badge">
 </p>
 
 ---
 
-## 🎬 Bot Execution Showcase & Video Guide
+## 🎬 Video Tutorial & Interactive Walkthrough
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" />
-  <br><br>
-  <img src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" width="700" alt="AFK Bot In Action" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);" />
-  <br><br>
-  <img src="https://img.shields.io/badge/%E2%96%B6%EF%B8%8F%20WATCH%20TUTORIAL-AFK%20BOT%20DEPLOYMENT%20GUIDE-FFB703?style=for-the-badge&logo=youtube&logoColor=black" />
+  <a href="https://www.youtube.com/results?search_query=itzxsahil+pingless+afk+bot">
+    <img src="assets/tutorial-showcase.svg" width="100%" alt="Video Tutorial Showcase" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" />
+  </a>
+  <p><em>▶️ <strong>Interactive Project Tutorial</strong> — Click the player above to watch full setup guide &amp; demonstration!</em></p>
 </div>
 
 ---
 
-# 🚀 Why Direct Mode (No VNC)?
+# 🚀 Overview
 
-Unlike traditional setups that run heavy Chrome and X11/VNC instances eating 1GB+ RAM, this bot connects **directly** to the Pingless AFK WebSockets:
-- 📉 Uses less than **30MB RAM**.
-- 🚫 Zero browser memory leaks, blank screens, or canvas crashes.
-- 🔄 Automatic session keepalive every 10 minutes.
-- 🛡️ Auto-reconnect handling on network disconnects.
+A high-efficiency, headless 24/7 AFK rewards bot for `dash.pingless.org`. By communicating directly via raw WebSockets, it eliminates the need for heavy Chrome or VNC containers.
 
 ---
 
-# ☁️ One-Click Cloud Deploy
+## 🏗️ System Architecture & Data Flow
 
-Deploy to Render or Railway using the included `Dockerfile` and `render.yaml`.
+<div align="center">
+  <img src="assets/architecture.svg" width="100%" alt="Architecture Diagram" style="border-radius: 12px;" />
+</div>
 
-### Environment Variables
-Configure your session cookies in environment variables or within `app.py`:
-- `PORT`: Set automatically by Render/Railway (defaults to `8080`).
+<br>
 
----
-
-# 📦 Local Run
-
-```bash
-git clone https://github.com/itz-spidy/pingless-afk-bot.git
-cd pingless-afk-bot
-
-pip install -r requirements.txt
-python app.py
-```
+AsyncIO client establishes persistent cookie-authenticated WebSockets directly with the Pingless backend, dispatching periodic heartbeats without any browser overhead.
 
 ---
 
-# 👤 Author
-Developed by [@itz-spidy](https://github.com/itz-spidy).
+# ✨ Features
+
+✅ **Direct WebSocket Stream**: Eliminates browser crashes, canvas rendering overhead, and memory leaks.\n✅ **Ultra Low Footprint**: Consumes under 30MB RAM.\n✅ **Auto Keepalive**: Regularly pings `dash.pingless.org/dashboard` every 10 minutes to maintain persistent session state.
+
+---
+
+# 📦 Installation & Quickstart
+
+### Cloud Deployment (Render / Railway)\nDeploy instantly using the bundled `Dockerfile` and `render.yaml`.\n\n### Local Run\n```bash\npip install -r requirements.txt\npython app.py\n```
+
+---
+
+# 👤 Author & Support
+- Built with ❤️ by [@itzxsahil](https://github.com/itzxsahil)
+- Star ⭐ this repository if you find it helpful!
