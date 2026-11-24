@@ -222,9 +222,9 @@ async def afk_websocket_loop():
                         pass
         except Exception as e:
             err_str = str(e)
-            if "4004" in err_str or "Replaced by a newer connection" in err_str:
-                state["status"] = "Standby (Active AFK on primary bot)"
-                log(f"Notice: Active AFK session already farming credits for user {USER_ID}. Yielding session to avoid conflict. Server auto-renewal & login keepalive remain 100% active. Checking again in 5m...")
+            if any(code in err_str for code in ["4004", "4006", "Replaced by a newer connection", "Too many connections"]):
+                state["status"] = "Standby (Active AFK on primary bot / Network busy)"
+                log(f"Notice: AFK connection limited ({err_str}). Yielding AFK session to avoid conflict. Server auto-renewal & login keepalive remain 100% active. Checking again in 5m...")
                 await asyncio.sleep(300)
             else:
                 state["status"] = "Disconnected (reconnecting...)"
