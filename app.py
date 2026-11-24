@@ -221,9 +221,15 @@ async def afk_websocket_loop():
                     except Exception:
                         pass
         except Exception as e:
-            state["status"] = "Disconnected (reconnecting...)"
-            log(f"WebSocket error: {e}. Reconnecting in 5s...")
-            await asyncio.sleep(5)
+            err_str = str(e)
+            if "4004" in err_str or "Replaced by a newer connection" in err_str:
+                state["status"] = "Standby (Active AFK on primary bot)"
+                log(f"Notice: Active AFK session already farming credits for user {USER_ID}. Yielding session to avoid conflict. Server auto-renewal & login keepalive remain 100% active. Checking again in 5m...")
+                await asyncio.sleep(300)
+            else:
+                state["status"] = "Disconnected (reconnecting...)"
+                log(f"WebSocket error: {e}. Reconnecting in 5s...")
+                await asyncio.sleep(5)
 
 # Task 4: Direct Web UI (No VNC needed!)
 async def index_handler(request):
